@@ -90,20 +90,8 @@ export const theme = createTheme({
         },
       },
     },
-    // MuiDataGrid: {
-    //   styleOverrides: {
-    //     root: {
-    //       border: 'none',
-    //       '& .MuiDataGrid-cell': {
-    //         borderBottom: '1px solid #e0e0e0',
-    //       },
-    //       '& .MuiDataGrid-columnHeaders': {
-    //         backgroundColor: '#f5f5f5',
-    //         borderBottom: '2px solid #e0e0e0',
-    //       },
-    //     },
-    //   },
-    // },
+    // MuiDataGrid styles are applied directly in the component via sx prop
+    // to avoid TypeScript issues with @mui/x-data-grid component types
     MuiAppBar: {
       styleOverrides: {
         root: {

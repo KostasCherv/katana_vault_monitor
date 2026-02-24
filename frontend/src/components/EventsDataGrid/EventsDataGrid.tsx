@@ -1,10 +1,9 @@
 import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import type { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
-import { Box, Typography, Chip, Link } from '@mui/material';
+import { Box, Typography, Tooltip } from '@mui/material';
 import { useEvents } from '../../hooks/useEvents';
-import { formatDate, formatAmount, formatAddress, getExplorerUrl } from '../../utils/formatters';
-// import type { VaultBridgeEvent } from '../../types';
+import { formatDate, formatAmount, formatAddress, formatTransactionHash } from '../../utils/formatters';
 
 interface EventsDataGridProps {
   asset?: string;
@@ -27,24 +26,186 @@ export const EventsDataGrid: React.FC<EventsDataGridProps> = (props) => {
   const totalRows = data?.pagination?.total || 0;
   const events = data?.data || [];
 
-  const columns = [
-    { field: 'event_timestamp', headerName: 'Date', width: 170, valueFormatter: (value: string) => formatDate(value || '', 'table') },
-    { field: 'asset', headerName: 'Asset', width: 110 },
-    { field: 'event_type', headerName: 'Type', width: 110 },
-    { field: 'tx_hash', headerName: 'Tx Hash', width: 220 },
-    { field: 'block_number', headerName: 'Block', width: 120 },
-    { field: 'sender', headerName: 'Sender', width: 180, valueFormatter: (value: string) => formatAddress(value || '') },
-    { field: 'receiver', headerName: 'Receiver', width: 180, valueFormatter: (value: string) => formatAddress(value || '') },
-    { field: 'owner', headerName: 'Owner', width: 180, valueFormatter: (value:string) => formatAddress(value || '') },
+  const columns: GridColDef[] = [
     {
-      field: 'assets', headerName: 'Assets', width: 160, valueFormatter: (value: string) => {
-      return formatAmount(value, '')
-    } },
-    { field: 'shares', headerName: 'Shares', width: 160 },
+      field: 'event_timestamp',
+      headerName: 'Date',
+      minWidth: 150,
+      flex: 1,
+      renderCell: (params: GridRenderCellParams) => (
+        <Tooltip title={params.value ? formatDate(params.value, 'tooltip') : ''}>
+          <Box sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {formatDate(params.value || '', 'table')}
+          </Box>
+        </Tooltip>
+      ),
+    },
+    {
+      field: 'asset',
+      headerName: 'Asset',
+      minWidth: 90,
+      flex: 0.6,
+    },
+    {
+      field: 'event_type',
+      headerName: 'Type',
+      minWidth: 90,
+      flex: 0.6,
+    },
+    {
+      field: 'tx_hash',
+      headerName: 'Tx Hash',
+      minWidth: 140,
+      flex: 1,
+      renderCell: (params: GridRenderCellParams) => (
+        <Tooltip title={params.value || ''}>
+          <Box
+            sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              fontFamily: 'monospace',
+              fontSize: '0.85rem',
+            }}
+          >
+            {formatTransactionHash(params.value || '')}
+          </Box>
+        </Tooltip>
+      ),
+    },
+    {
+      field: 'block_number',
+      headerName: 'Block',
+      minWidth: 90,
+      flex: 0.6,
+      align: 'right',
+      headerAlign: 'right',
+    },
+    {
+      field: 'sender',
+      headerName: 'Sender',
+      minWidth: 120,
+      flex: 0.9,
+      renderCell: (params: GridRenderCellParams) => (
+        <Tooltip title={params.value || ''}>
+          <Box
+            sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              fontFamily: 'monospace',
+              fontSize: '0.85rem',
+            }}
+          >
+            {formatAddress(params.value || '')}
+          </Box>
+        </Tooltip>
+      ),
+    },
+    {
+      field: 'receiver',
+      headerName: 'Receiver',
+      minWidth: 120,
+      flex: 0.9,
+      renderCell: (params: GridRenderCellParams) => (
+        <Tooltip title={params.value || ''}>
+          <Box
+            sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              fontFamily: 'monospace',
+              fontSize: '0.85rem',
+            }}
+          >
+            {formatAddress(params.value || '')}
+          </Box>
+        </Tooltip>
+      ),
+    },
+    {
+      field: 'owner',
+      headerName: 'Owner',
+      minWidth: 120,
+      flex: 0.9,
+      renderCell: (params: GridRenderCellParams) => (
+        <Tooltip title={params.value || ''}>
+          <Box
+            sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              fontFamily: 'monospace',
+              fontSize: '0.85rem',
+            }}
+          >
+            {formatAddress(params.value || '')}
+          </Box>
+        </Tooltip>
+      ),
+    },
+    {
+      field: 'assets',
+      headerName: 'Assets',
+      minWidth: 120,
+      flex: 0.8,
+      align: 'right',
+      headerAlign: 'right',
+      renderCell: (params: GridRenderCellParams) => {
+        const formatted = formatAmount(params.value, params.row?.asset || '');
+        return (
+          <Tooltip title={formatted}>
+            <Box
+              sx={{
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                fontVariantNumeric: 'tabular-nums',
+              }}
+            >
+              {formatted}
+            </Box>
+          </Tooltip>
+        );
+      },
+    },
+    {
+      field: 'shares',
+      headerName: 'Shares',
+      minWidth: 120,
+      flex: 0.8,
+      align: 'right',
+      headerAlign: 'right',
+      renderCell: (params: GridRenderCellParams) => {
+        const value = params.value ? Number(params.value).toLocaleString() : '';
+        return (
+          <Tooltip title={value}>
+            <Box
+              sx={{
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                fontVariantNumeric: 'tabular-nums',
+              }}
+            >
+              {value}
+            </Box>
+          </Tooltip>
+        );
+      },
+    },
   ];
   
   return (
-    <Box sx={{ height: 600, width: '100%', background: '#fff', borderRadius: 2, p: 2 }}>
+    <Box
+      sx={{
+        width: '100%',
+        background: '#fff',
+        borderRadius: 2,
+        p: 2,
+        overflow: 'hidden',
+      }}
+    >
       <Typography variant="h6" sx={{ mb: 2 }}>
         Events
       </Typography>
@@ -71,8 +232,34 @@ export const EventsDataGrid: React.FC<EventsDataGridProps> = (props) => {
           }
         }}
         sx={{
+          border: 'none',
           '& .MuiDataGrid-row': {
             cursor: 'pointer',
+          },
+          '& .MuiDataGrid-row:hover': {
+            backgroundColor: 'rgba(25, 118, 210, 0.04)',
+          },
+          '& .MuiDataGrid-cell': {
+            borderBottom: '1px solid #e0e0e0',
+            py: 1,
+            display: 'flex',
+            alignItems: 'center',
+          },
+          '& .MuiDataGrid-columnHeaders': {
+            backgroundColor: '#f5f5f5',
+            borderBottom: '2px solid #e0e0e0',
+          },
+          '& .MuiDataGrid-columnHeader': {
+            fontWeight: 600,
+          },
+          '& .MuiDataGrid-columnHeaderTitle': {
+            fontWeight: 600,
+          },
+          '& .MuiDataGrid-virtualScroller': {
+            minHeight: 200,
+          },
+          '& .MuiDataGrid-footerContainer': {
+            borderTop: '1px solid #e0e0e0',
           },
         }}
       />
