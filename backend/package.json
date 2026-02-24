@@ -1,0 +1,47 @@
+{
+	"name": "katana-vaultbridge-backend",
+	"version": "1.0.0",
+	"description": "VaultBridge Inflow/Outflow Monitor for Katana Network",
+	"main": "dist/index.js",
+	"scripts": {
+		"build": "tsc",
+		"start": "node dist/index.js",
+		"dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+		"lint": "eslint src/**/*.ts",
+		"lint:fix": "eslint src/**/*.ts --fix",
+		"db:migrate": "node dist/database/migrate.js"
+	},
+	"keywords": [
+		"katana",
+		"vaultbridge",
+		"blockchain",
+		"monitoring"
+	],
+	"author": "",
+	"license": "MIT",
+	"dependencies": {
+		"express": "^4.18.2",
+		"cors": "^2.8.5",
+		"helmet": "^7.1.0",
+		"morgan": "^1.10.0",
+		"dotenv": "^16.3.1",
+		"pg": "^8.11.3",
+		"ethers": "^6.8.1",
+		"winston": "^3.11.0",
+		"joi": "^17.11.0",
+		"uuid": "^9.0.1"
+	},
+	"devDependencies": {
+		"@types/express": "^4.17.21",
+		"@types/cors": "^2.8.17",
+		"@types/morgan": "^1.9.9",
+		"@types/pg": "^8.10.9",
+		"@types/uuid": "^9.0.7",
+		"@types/node": "^20.10.0",
+		"@typescript-eslint/eslint-plugin": "^6.13.1",
+		"@typescript-eslint/parser": "^6.13.1",
+		"eslint": "^8.54.0",
+		"ts-node-dev": "^2.0.0",
+		"typescript": "^5.3.2"
+	}
+}
