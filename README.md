@@ -2,6 +2,8 @@
 
 A full-stack application for monitoring VaultBridge inflow and outflow data on the Katana network.
 
+<img width="1698" height="986" alt="image" src="https://github.com/user-attachments/assets/370261a8-7a5e-49e2-b433-eb496c393d3e" />
+
 ## Project Structure
 
 ```
